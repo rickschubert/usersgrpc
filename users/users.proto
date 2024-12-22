@@ -1,0 +1,73 @@
+edition = "2023";
+
+option go_package = "github.com/rickschuberts/usersgrpc/users";
+
+package users;
+
+service Users {
+  rpc GetUser(GetUserInput) returns (User) {}
+  rpc AddUser(AddUserInput) returns (User) {}
+  rpc ModifyUser(ModifyUserInput) returns (User) {}
+  rpc RemoveUser(RemoveUserInput) returns (User) {}
+  rpc ListUsers(ListUsersInput) returns (ListUsersResponse) {}
+}
+
+// Response message for listing users
+message ListUsersResponse {
+  repeated User users = 1;
+  // If the paginated response is at page limit, this token will be present
+  // so that another request can be made to paginate further
+  string next_page_token = 2;
+}
+
+message ListUsersInput {
+  int32 page_size = 1;
+  // Optional parameter to continue paginating over the responses
+  string next_page_token = 2;
+  // Optional property to filter users by a given country
+  string country = 3;
+}
+
+message RemoveUserInput {
+  // Mandatory parameter of the user to remove
+  string id = 1;
+}
+
+message GetUserInput {
+  // Mandatory parameter of the user to retrieve
+  string id = 1;
+}
+
+message User {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string nickname = 4;
+  string password = 5;
+  string email = 6;
+  string country = 7;
+  string created_at = 8;
+  string updated_at = 9;
+}
+
+// All parameters are optional
+message AddUserInput {
+  string first_name = 1;
+  string last_name = 2;
+  string nickname = 3;
+  string password = 4;
+  string email = 5;
+  string country = 6;
+}
+
+message ModifyUserInput {
+  // Mandatory parameter to identify the user to modify
+  string id = 1;
+  // All other parameters are optional
+  string first_name = 2;
+  string last_name = 3;
+  string nickname = 4;
+  string password = 5;
+  string email = 6;
+  string country = 7;
+}
